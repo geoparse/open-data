@@ -74,8 +74,8 @@ chmod 600 *
 
 csv_file=$(ls *.csv)
 parquet_file="${csv_file%.*}.parquet"
-duckdb -c "COPY (SELECT UPRN, LATITUDE, LONGITUDE FROM '$csv_file') TO '$parquet_file' (FORMAT PARQUET)"
 
+duckdb -c "COPY (SELECT UPRN as uprn, LATITUDE as lat, LONGITUDE as lon FROM $csv_file) TO $parquet_file"
 
 ```
 
