@@ -104,7 +104,7 @@ ogrinfo -al -so osopenusrn_202509.gpkg
 * `osopenusrn_202509.gpkg`: The input GeoPackage file
 
 
-This following command converts the downloaded GeoPackage file to a Parquet file using `ogr2ogr`.
+This following commands downloads the GeoPackage file, process and export it into a Parquet file using `ogr2ogr`.
 
 ```bash
 mkdir -p data/usrn
@@ -124,7 +124,7 @@ ogr2ogr $parquet_file $gpkg_file -dim 2 -unsetFid  -t_srs EPSG:4326 -makevalid
 rm $gpkg_file
 
 ```
-Here's what each part does:
+Here's what each part of the `ogr2ogr` does:
 
 * `ogr2ogr`: GDAL/OGR utility for converting geospatial data between formats
 * `osopenusrn_202509.parquet`: Output file (Parquet format)
