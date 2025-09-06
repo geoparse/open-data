@@ -79,6 +79,8 @@ parquet_file="${csv_file%.*}.parquet"
 
 duckdb -c "COPY (SELECT UPRN as uprn, LATITUDE as lat, LONGITUDE as lon FROM $csv_file) TO $parquet_file"
 
+rm $csv_file.csv
+
 ```
 
 ---
