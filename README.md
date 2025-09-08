@@ -3,7 +3,7 @@
 This repository provides scripts for downloading, preprocessing and exporting open data into Parquet files.
 
 ---
-## Prerequisites
+# Prerequisites
 
 ### GDAL
 
@@ -130,6 +130,24 @@ Here's what each part of the `ogr2ogr` does:
 * `-unsetFid`: Prevents FID column from being exported to output
 * `-t_srs EPSG:4326`: Reprojects data to WGS84 (latitude/longitude)
 * `-makevalid`: Attempts to fix invalid geometries
+
+
+
+---
+# OSM
+
+```bash
+REGION='europe'
+COUNTRY='united-kingdom'
+mkdir -p data/$COUNTRY
+
+cd data/$COUNTRY
+wget https://download.geofabrik.de/$REGION/$COUNTRY-latest.osm.pbf
+
+ogrinfo $COUNTRY-latest.osm.pbf | cut -d: -f2 | cut -d' ' -f2 | tail -n +3 | while read layer; do ogr2ogr ${layer}.parquet $COUNTRY-latest.osm.pbf $layer; done
+
+```
+
 
 ---
 ## License
