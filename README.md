@@ -61,8 +61,8 @@ Unique Property Reference Number (UPRN) is a unique identifier assigned to every
 You can download the latest UPRN dataset from [Ordnance Survey Data Hub](https://osdatahub.os.uk/downloads/open/OpenUPRN). Choose the `CSV` format, as it is smaller and faster to process than the `GeoPackage` version. 
 
 ```bash
-mkdir -p data/uprn
-cd data/uprn
+mkdir -p data/os-open-uprn
+cd data/os-open-uprn
 
 curl -L -o uprn.zip "https://api.os.uk/downloads/v1/products/OpenUPRN/downloads?area=GB&format=CSV&redirect"
 
@@ -76,6 +76,8 @@ csv_file=$(ls *.csv)
 parquet_file="${csv_file%.*}.parquet"
 
 duckdb -c "COPY (SELECT UPRN as uprn, LATITUDE as lat, LONGITUDE as lon FROM $csv_file) TO $parquet_file"
+
+ls -lh
 
 ```
 
@@ -102,8 +104,8 @@ ogrinfo -al -so osopenusrn_202509.gpkg
 This following commands downloads the GeoPackage file, process and export it into a Parquet file using `ogr2ogr`.
 
 ```bash
-mkdir -p data/usrn
-cd data/usrn
+mkdir -p data/os-open-usrn
+cd data/os-open-usrn
 
 curl -L -o usrn.zip "https://api.os.uk/downloads/v1/products/OpenUSRN/downloads?area=GB&format=GeoPackage&redirect"
 
@@ -115,6 +117,8 @@ gpkg_file=$(ls *.gpkg)
 parquet_file="${gpkg_file%.*}.parquet"
 
 ogr2ogr $parquet_file $gpkg_file -dim 2 -unsetFid  -t_srs EPSG:4326 -makevalid
+
+ls -lh
 
 ```
 Here's what each part of the `ogr2ogr` does:
