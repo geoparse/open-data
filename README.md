@@ -182,7 +182,7 @@ unzip -o roads.zip
 rm roads.zip
 
 mv Data/* .
-mv Doc/* .
+mv Doc/licence.txt .
 rm -rf Data/ Doc/
 
 gpkg_file=$(ls *.gpkg)
