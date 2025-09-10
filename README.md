@@ -68,13 +68,11 @@ You can download the latest UPRN dataset from [Ordnance Survey Data Hub](https:/
 
 ```bash
 mkdir -p data/os-open-uprn
-cd data/os-open-uprn
+cd $_
 
-curl -L -o uprn.zip "https://api.os.uk/downloads/v1/products/OpenUPRN/downloads?area=GB&format=CSV&redirect"
-
-unzip -o uprn.zip
-
-rm uprn.zip
+curl -L "https://api.os.uk/downloads/v1/products/OpenUPRN/downloads?area=GB&format=CSV&redirect" -o uprn.zip
+unzip -o $_
+rm $_
 
 chmod 600 *
 
@@ -114,13 +112,11 @@ This following commands downloads the GeoPackage file, process and export it int
 
 ```bash
 mkdir -p data/os-open-usrn
-cd data/os-open-usrn
+cd $_
 
-curl -L -o usrn.zip "https://api.os.uk/downloads/v1/products/OpenUSRN/downloads?area=GB&format=GeoPackage&redirect"
-
-unzip -o usrn.zip
-
-rm usrn.zip
+curl -L "https://api.os.uk/downloads/v1/products/OpenUSRN/downloads?area=GB&format=GeoPackage&redirect" -o usrn.zip
+unzip -o $_
+rm $_
 
 gpkg_file=$(ls *.gpkg)
 parquet_file="${gpkg_file%.*}.parquet"
@@ -151,12 +147,11 @@ Source: [https://osdatahub.os.uk/downloads/open/OpenRoads](https://osdatahub.os.
 ```bash
 
 mkdir -p data/os-open-roads
-cd data/os-open-roads
+cd $_
 
-curl -L -o roads.zip "https://api.os.uk/downloads/v1/products/OpenRoads/downloads?area=GB&format=GeoPackage&redirect"
-
-unzip -o roads.zip
-rm roads.zip
+curl -L "https://api.os.uk/downloads/v1/products/OpenRoads/downloads?area=GB&format=GeoPackage&redirect" -o roads.zip
+unzip -o $_
+rm $_
 
 mv Data/* .
 mv Doc/licence.txt .
@@ -183,8 +178,8 @@ The following script is an automation pipeline to download and convert OpenStree
 REGION='europe'
 COUNTRY='united-kingdom'
 mkdir -p data/osm/$COUNTRY
+cd $_
 
-cd data/osm/$COUNTRY
 wget https://download.geofabrik.de/$REGION/$COUNTRY-latest.osm.pbf
 
 ogrinfo $COUNTRY-latest.osm.pbf | cut -d: -f2 | cut -d' ' -f2 | tail -n +3 | while read layer; do ogr2ogr ${layer}.parquet $COUNTRY-latest.osm.pbf $layer; done
