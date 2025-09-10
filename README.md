@@ -5,7 +5,7 @@ This repository provides scripts for downloading, preprocessing and exporting op
 ---
 # Prerequisites
 
-### GDAL
+## GDAL
 
 Before running the scripts in this repository, ensure that [GDAL](https://gdal.org/) is installed on your system. `GDAL` (Geospatial Data Abstraction Library) and `OGR` (OGR Simple Features Library) are essential tools for working with geospatial data. `GDAL` is designed for reading, writing, and processing raster geospatial data, such as satellite images and digital elevation models. It supports a variety of raster formats, including GeoTIFF, JPEG, PNG, and HDF5. On the other hand, `OGR` is specialized in handling vector geospatial data, including points, lines, and polygons, and supports formats like Shapefiles, GeoJSON, KML, PostGIS, and OSM PBF. 
 
@@ -46,7 +46,7 @@ Both commands should return output similar to:
 
 `GDAL 3.11.3 "Eganville", released 2025/07/12`
 
-### DuckDB
+## DuckDB
 This repository uses `DuckDB`, a lightweight, in-process analytical database designed for fast querying of large datasets. Unlike traditional database servers, `DuckDB` runs directly inside your scripts or applications and can query files such as `CSV` and `Parquet` without requiring data to be imported first. It is often described as “SQLite for analytics” due to its simplicity and efficiency for analytical workloads. We use `DuckDB` to export files to the `Parquet` format.
 
 ```bash
@@ -54,8 +54,10 @@ brew install duckdb
 
 ```
 
+# Open Datasets
+
 ---
-# [OS Open UPRN](https://osdatahub.os.uk/downloads/open/OpenUPRN)
+## [OS Open UPRN](https://osdatahub.os.uk/downloads/open/OpenUPRN)
 Unique Property Reference Number (UPRN) is a unique identifier assigned to every addressable location in the United Kingdom, including residential and commercial properties, land parcels, and other structures such as bus shelters or community assets. Managed by Ordnance Survey, the UPRN acts as a consistent reference point across different datasets and systems, ensuring that information from local authorities, government bodies, and private organisations can be accurately linked to the same physical location. Because it is stable over the lifetime of the property or land parcel, the UPRN plays a vital role in data integration, geocoding, property analytics, and service delivery, helping organisations reduce duplication, improve accuracy, and make better evidence-based decisions.
 
 You can download the latest UPRN dataset from [Ordnance Survey Data Hub](https://osdatahub.os.uk/downloads/open/OpenUPRN). Choose the `CSV` format, as it is smaller and faster to process than the `GeoPackage` version. 
@@ -82,7 +84,7 @@ ls -lh
 ```
 
 ---
-# [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN)
+## [OS Open USRN](https://osdatahub.os.uk/downloads/open/OpenUSRN)
 
 Unique Street Reference Number (USRN), is a nationally recognised identifier used in Great Britain to uniquely reference every street, including roads, footpaths, cycleways and alleys. It forms part of the national addressing system and is maintained through the [National Street Gazetteer](https://www.geoplace.co.uk/addresses-streets/street-data-and-services/national-street-gazetteer), which is compiled and updated by local authorities. Much like the Unique Property Reference Number (UPRN) identifies individual properties, the USRN ensures that each street has a consistent reference across different datasets and organisations. This makes it essential for activities such as managing streetworks permits, supporting navigation and transport planning, enabling emergency services, and integrating data across government and utility providers.
 
@@ -132,7 +134,7 @@ Here's what each part of the `ogr2ogr` does:
 * `-makevalid`: Attempts to fix invalid geometries
 
 ---
-# [OS Open Roads](https://osdatahub.os.uk/downloads/open/OpenRoads)
+## [OS Open Roads](https://osdatahub.os.uk/downloads/open/OpenRoads)
 
 ```bash
 
@@ -157,7 +159,7 @@ ls -lh
 ```
 
 ---
-# [OpenStreetMap (OSM)](https://download.geofabrik.de/)
+## [OpenStreetMap (OSM)](https://download.geofabrik.de/)
 
 The following script is an automation pipeline to download and convert OpenStreetMap (OSM) data into Parquet files, layer by layer.
 
@@ -192,16 +194,21 @@ done
 ```
 For each layer name, `ogr2ogr` extracts it from the `.osm.pbf` and saves it as a separate Parquet file (e.g. points.parquet, lines.parquet, …) for easier analysis.
 
----
-## License
-This project is licensed under the MIT License. See `LICENSE` for details.
+
+## [DfT Road Traffic](https://roadtraffic.dft.gov.uk/downloads)
+
+## [DfT Road Safety](https://www.data.gov.uk/dataset/cb7ae6f0-4be6-4935-9277-47e5ce24a11f/road-accidents-safety-data)
 
 ---
-## Support
+# License
+or each dataset, please refer to the licence file located in the corresponding directory.
+
+---
+# Support
 For issues or questions, feel free to create an issue in the repository or contact the maintainer.
 
 ---
-## Contributing
+# Contributing
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 
