@@ -222,6 +222,40 @@ Source: [https://www.data.gov.uk/dataset/road-accidents-safety-data](https://www
 
 </details>
 
+
+
+<details>
+<summary><h2>7. Police Open Data</h2></summary>
+
+Source: [https://data.police.uk/data/archive/](https://data.police.uk/data/archive/)
+
+The following script automates the process of downloading the last three years of police data archives and converting them into Parquet files.
+
+```bash
+mkdir -p police
+cd $_
+wget https://data.police.uk/data/archive/latest.zip
+
+unzip latest.zip
+rm $_
+
+for dir in */; do
+  echo "Processing $dir..."
+  (
+    cd "$dir" || exit
+    duckdb -c "COPY (SELECT * FROM read_csv_auto('*street*.csv', quote='\"')) TO 'street.parquet';"
+    duckdb -c "COPY (SELECT * FROM read_csv_auto('*stop*.csv', quote='\"')) TO 'stop-and-search.parquet';"
+    duckdb -c "COPY (SELECT * FROM read_csv_auto('*outcomes*.csv', quote='\"')) TO 'outcomes.parquet';"
+    rm -f *.csv
+  )
+done
+
+ls -lh
+
+```
+
+</details>
+
 ---
 # License
 For each dataset, please refer to the licence file located in the corresponding directory.
