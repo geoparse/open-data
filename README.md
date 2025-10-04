@@ -91,6 +91,45 @@ ls -lh
 ```
 </details>
 
+
+<details>
+<summary><h2>3. OS Open Postcodes</h2></summary>
+
+Source: [https://osdatahub.os.uk/downloads/open/CodePointOpen](https://osdatahub.os.uk/downloads/open/CodePointOpen)
+
+`OS Code-Point® Open` is a free dataset from Ordnance Survey that provides a geographic coordinate for every postcode unit across Great Britain, covering over 1.7 million postcodes in England, Scotland, and Wales.
+Each record includes the postcode, its precise location and the local authority code.
+Released under the Open Government Licence, it can be freely used for both commercial and non-commercial purposes with proper attribution.
+
+The following script provides an automated pipeline for downloading, cleaning, reprojecting, and converting postcode data into Parquet files.
+
+```bash
+
+mkdir -p data/os-codepoint-open
+cd $_
+
+curl -L "https://api.os.uk/downloads/v1/products/CodePointOpen/downloads?area=GB&format=GeoPackage&redirect" -o codepoint.zip
+unzip -o $_
+rm $_
+
+mv Data/* .
+mv Doc/licence.txt Doc/metadata.txt Doc/Codelist.xlsx .
+rm -rf Data/ Doc/
+
+gpkg_file=$(ls *.gpkg)
+parquet_file="${gpkg_file%.*}.parquet"
+
+ogr2ogr $parquet_file $gpkg_file -sql "SELECT postcode, admin_district_code, admin_ward_code, geometry FROM codepoint WHERE NOT ST_Equals(geometry, ST_GeomFromText('POINT(0 0)'))" -t_srs EPSG:4326 -makevalid
+
+ls -lh
+
+```
+
+</details>
+
+
+
+
 <details>
 <summary><h2>2. OS Open USRN</h2></summary>
 
