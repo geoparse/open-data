@@ -87,6 +87,7 @@ parquet_file="${csv_file%.*}.parquet"
 duckdb -c "COPY (SELECT UPRN as uprn, LATITUDE as lat, LONGITUDE as lon FROM $csv_file) TO $parquet_file"
 
 ls -lh
+cd ../../
 
 ```
 </details>
@@ -168,6 +169,7 @@ parquet_file="${gpkg_file%.*}.parquet"
 ogr2ogr $parquet_file $gpkg_file -dim 2 -unsetFid  -t_srs EPSG:4326 -makevalid
 
 ls -lh
+cd ../../
 
 ```
 Here's what each part of the `ogr2ogr` does:
@@ -206,6 +208,7 @@ gpkg_file=$(ls *.gpkg)
 ogrinfo $gpkg_file | cut -d: -f2 | cut -d' ' -f2 | tail -n +3 | while read layer; do ogr2ogr ${layer}.parquet $gpkg_file $layer -unsetFid  -t_srs EPSG:4326 -makevalid; done
 
 ls -lh
+cd ../../
 
 ```
 
@@ -229,6 +232,7 @@ wget https://download.geofabrik.de/$REGION/$COUNTRY-latest.osm.pbf
 ogrinfo $COUNTRY-latest.osm.pbf | cut -d: -f2 | cut -d' ' -f2 | tail -n +3 | while read layer; do ogr2ogr ${layer}.parquet $COUNTRY-latest.osm.pbf $layer; done
 
 ls -lh
+cd ../../
 
 ```
 
@@ -281,6 +285,7 @@ duckdb -c "COPY (SELECT * FROM read_csv_auto($csv_file, nullstr=['NULL'])) TO $p
 rm *.csv
 
 ls -lh
+cd ../../
 
 ```
 </details>
@@ -313,6 +318,9 @@ parquet_file="${csv_file%.*}.parquet"
 duckdb -c "COPY (SELECT * FROM read_csv_auto('$csv_file', sample_size=-1)) TO '$parquet_file';"
 rm $csv_file
 
+ls -lh
+cd ../../
+
 ```
 </details>
 
@@ -344,6 +352,7 @@ for dir in */; do
 done
 
 ls -lh
+cd ../../
 
 ```
 
