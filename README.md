@@ -121,7 +121,10 @@ parquet_file="${gpkg_file%.*}.parquet"
 
 ogr2ogr $parquet_file $gpkg_file -sql "SELECT postcode, country_code, admin_district_code, admin_ward_code, geometry FROM codepoint WHERE NOT ST_Equals(geometry, ST_GeomFromText('POINT(0 0)'))" -t_srs EPSG:4326 -makevalid
 
-ls -lh
+cd ../../
+uv run python postcode_impute.py
+
+ls -lh data/os-codepoint-open
 
 ```
 </details>
