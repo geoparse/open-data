@@ -94,27 +94,7 @@ Released under the Open Government Licence, it can be freely used for both comme
 The following script provides an automated pipeline for downloading, cleaning, reprojecting, and converting postcode data into Parquet files.
 
 ```bash
-
-mkdir -p data/os-codepoint-open
-cd $_
-
-curl -L "https://api.os.uk/downloads/v1/products/CodePointOpen/downloads?area=GB&format=GeoPackage&redirect" -o codepoint.zip
-unzip -o $_
-rm $_
-
-mv Data/* .
-mv Doc/licence.txt Doc/metadata.txt Doc/Codelist.xlsx .
-rm -rf Data/ Doc/
-
-gpkg_file=$(ls *.gpkg)
-parquet_file="${gpkg_file%.*}.parquet"
-
-ogr2ogr $parquet_file $gpkg_file -sql "SELECT postcode, country_code, admin_district_code, admin_ward_code, geometry FROM codepoint WHERE NOT ST_Equals(geometry, ST_GeomFromText('POINT(0 0)'))" -t_srs EPSG:4326 -makevalid
-
-cd ../../
-uv run python postcode_impute.py
-
-ls -lh data/os-codepoint-open
+./os-codepoint-open.sh
 
 ```
 </details>
