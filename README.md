@@ -91,7 +91,7 @@ Source: [https://osdatahub.os.uk/downloads/open/CodePointOpen](https://osdatahub
 Each record includes the postcode, its precise location and the local authority code.
 Released under the Open Government Licence, it can be freely used for both commercial and non-commercial purposes with proper attribution.
 
-The following script provides an automated pipeline for downloading, cleaning, reprojecting, and converting postcode data into Parquet files.
+The following script provides an automated pipeline for downloading, cleansing, reprojecting, and converting postcode data into Parquet files.
 
 ```bash
 ./os-codepoint-open.sh
