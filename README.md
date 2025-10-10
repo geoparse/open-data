@@ -327,6 +327,43 @@ cd ../../
 
 </details>
 
+
+<details>
+<summary><h2>9. ONS Income Data</h2></summary>
+
+Source: [Income estimates for small areas, England and Wales](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales)
+
+The Excel file above includes separate sheets for:
+
+* Total annual household income
+* Net annual income
+* Net income before housing costs
+* Net income after housing costs
+
+Data are provided at the `Middle Layer Super Output Area (MSOA)` level for England and Wales.
+Each MSOA is represented by three values — the `lower confidence limit`, `mean estimate`, and `upper confidence limit` 
+which together form a 95% confidence interval.
+A `95% confidence interval` means that we can be 95% confident the true mean household income 
+for each area lies between the lower and upper confidence limits.
+
+The following script automates the process of downloading and converting income data into Parquet files, processing each sheet individually.
+
+```bash
+mkdir -p data/ons-income
+cd $_
+curl -L https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallmeestimatesformiddlelayersuperoutputareasenglandandwales/financialyearending2020/saiefy1920finalqaddownload280923.xlsx -o ons-income.xlsx
+
+
+
+ls -lh
+cd ../../
+
+```
+
+</details>
+
+
+
 ---
 # License
 For each dataset, please refer to the licence file located in the corresponding directory.
