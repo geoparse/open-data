@@ -78,7 +78,7 @@ Alternatively, you can run the script directly:
 
 ```
 This will download, process, and save the latest OS Open UPRN dataset as a `Parquet` file in the `data/os-open-uprn/` directory.
-
+We convert the dataset to a `Parquet` file (using `DuckDB`) instead of a `GeoParquet` file (using `ogr2ogr`) because reading standard `Parquet` files with `pandas` is significantly faster than loading `GeoParquet` files with `geopandas` in Python.
 </details>
 
 
