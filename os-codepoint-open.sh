@@ -7,7 +7,7 @@
 #   and runs postcode imputation.
 # ------------------------------------------------------------------------------
 
-set -euo pipefail  # Exit on error, undefined var, or failed pipe
+set -euo pipefail  # Exit on error, undefined var, or failed pipe instead of continuing silently.
 
 # ------------------------------------------------------------------------------
 # 1. Prepare working directory
