@@ -83,7 +83,7 @@ This will download, process, and save the latest OS Open UPRN dataset as a `Parq
 
 
 <details>
-<summary><h2>2. OS Open Postcodes</h2></summary>
+<summary><h2>2. OS Code-Point Open</h2></summary>
 
 Source: [https://osdatahub.os.uk/downloads/open/CodePointOpen](https://osdatahub.os.uk/downloads/open/CodePointOpen)
 
