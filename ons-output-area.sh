@@ -1,11 +1,27 @@
 #!/usr/bin/env bash
+# ============================================================
+# Script: download_and_convert_ons_geographies.sh
+# Purpose: Download ONS Output Area (OA), LSOA, and MSOA
+#          shapefiles for England and Wales, convert to Parquet.
+# ============================================================
+
+set -euo pipefail
+
+# ------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------
 
 DATA_DIR="data/ons-output-area"
 
 mkdir -p "$DATA_DIR"
 cd "$DATA_DIR"
 
-mkdir shp
+mkdir -p shp
+
+# ------------------------------------------------------------
+# Download shapefiles
+# ------------------------------------------------------------
+echo "Downloading ONS Output Area, LSOA, and MSOA shapefiles..."
 
 curl https://data.cambridgeshireinsight.org.uk/sites/default/files/Output_Area_December_2011_Generalised_Clipped_Boundaries_in_England_and_Wales.zip -o shp/oa.zip
 
@@ -13,17 +29,50 @@ curl https://data.cambridgeshireinsight.org.uk/sites/default/files/Lower_Layer_S
 
 curl https://data.cambridgeshireinsight.org.uk/sites/default/files/MSOA_EngWal_Dec_2011_Generalised_ClippedEW_0.zip -o shp/msoa.zip
 
-unzip -d shp/ 'shp/*.zip'
-rm $_
+echo "Downloads complete."
+echo
 
-# Loop through all .shp files in a directory
+# ------------------------------------------------------------
+# Unzip shapefiles
+# ------------------------------------------------------------
+echo "Extracting shapefiles..."
+unzip -d shp/ -o 'shp/*.zip'
+rm $_
+echo "Extraction complete."
+echo
+
+# ------------------------------------------------------------
+# Convert shapefiles to Parquet
+# ------------------------------------------------------------
+echo "Converting shapefiles to Parquet format..."
+
+# Loop through all .shp files and convert each to Parquet
 for shp_file in shp/*.shp; do
     base_name=$(basename "$shp_file" .shp)
-    ogr2ogr "${base_name}.parquet" "$shp_file" -unsetFid -t_srs EPSG:4326 -makevalid
+
+    export CPL_LOG=/dev/null  # ignore warning and error messages 
+    ogr2ogr -q \
+      -f Parquet "${base_name}.parquet" \
+      "$shp_file" \
+      -t_srs EPSG:4326 \
+      -makevalid
 done
+
+echo "Conversion complete."
+echo
+
+# ------------------------------------------------------------
+# Standardize Parquet filenames
+# ------------------------------------------------------------
 
 mv L* lsoa.parquet
 mv M* msoa.parquet
 mv O* oa.parquet
 
-cd ../../
+echo "All Parquet files ready in $DATA_DIR"
+echo
+
+# ------------------------------------------------------------
+# Return to project root
+# ------------------------------------------------------------
+cd - >/dev/null
