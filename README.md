@@ -97,8 +97,24 @@ The following script provides an automated pipeline for downloading, cleansing, 
 ./os-codepoint-open.sh
 
 ```
-</details>
+The following sample shows the data structure stored in the Parquet file:
 
+| postcode | country_code | admin_district_code | admin_ward_code | geometry |
+|----------|--------------|---------------------|-----------------|----------|
+| AB10 1AB | Scotland | Aberdeen City | George St/Harbour Ward | POINT (-2.09692 57.14959) |
+| AB10 1AF | Scotland | Aberdeen City | George St/Harbour Ward | POINT (-2.09692 57.14959) |
+| AB10 1AG | Scotland | Aberdeen City | George St/Harbour Ward | POINT (-2.09700 57.14905) |
+| AB10 1AH | Scotland | Aberdeen City | George St/Harbour Ward | POINT (-2.09692 57.14959) |
+| AB10 1AL | Scotland | Aberdeen City | George St/Harbour Ward | POINT (-2.09530 57.14959) |
+
+**Dataset Statistics (Unique Values):**
+- `postcode`: ~1.74M
+- `country_code`: 3
+- `admin_district_code`: 350
+- `admin_ward_code`: 7,524
+- `geometry`: ~1.68M
+
+</details>
 
 <details>
 <summary><h2>3. OS Open USRN</h2></summary>
@@ -368,7 +384,44 @@ Output Area Geography
 `ons-output-area.sh` processes socio-economic data for different geographic layers in England and Wales, following the Office for National Statistics (ONS) spatial hierarchy. The smallest statistical building block is the `Census Output Area (OA)`, representing a compact group of households designed for detailed local analysis. `Lower-layer Super Output Areas (LSOA)` combine multiple OAs to ensure population stability over time, while `Middle-layer Super Output Areas (MSOA)` group several LSOAs to create larger, consistent geographic zones suitable for public reporting and policy analysis.
 
 ```bash
+
 ./ons-output-area.sh
+
+```
+</details>
+
+
+
+<details>
+<summary><h2>11. UK Countries and England Regions</h2></summary>
+
+Source: [Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and [Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+
+The Office for National Statistics (ONS) provides boundary data for the UK countries and the regions of England, available in multiple spatial resolutions and coastline treatments to balance accuracy and performance. Each boundary file includes a suffix such as `BFC`, `BFE`, `BGC`, `BSC`, or `BUC` that indicates both the detail level and whether the boundary is clipped to the coastline or includes the extent of the realm (i.e., offshore areas).
+These options let you balance geometric accuracy with file size and performance, depending on your analysis or mapping needs.
+
+Use full resolution versions (BFC/BFE) for analysis or precise overlays, and generalised versions (BGC/BSC/BUC) for visualisation, web mapping, or when handling large datasets.
+Choose “clipped” versions when you only need land boundaries, or “extent of realm” when including sea/offshore territories is important.
+
+| Code    | Meaning                                                       | Detail                                                                   |
+| ------- | ------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **BFE** | Boundary – Full resolution, *Extent of the Realm*             | Highest-detail geometry including offshore areas and islands.            |
+| **BFC** | Boundary – Full resolution, *Clipped to coastline*            | Same high-detail boundary, but trimmed at the mean high-water coastline. |
+| **BGC** | Boundary – Generalised (~20 m), *Clipped to coastline*        | Simplified geometry suitable for most mapping and display purposes.      |
+| **BSC** | Boundary – Super-generalised (~200 m), *Clipped to coastline* | Coarser generalisation for lightweight, large-scale mapping.             |
+| **BUC** | Boundary – Ultra-generalised (~500 m), *Clipped to coastline* | Smallest and simplest file size, least geometric detail.                 |
+
+For process the files you need to download the `GeoPackage` files from the following pages for all spatial resolutions (`BFC`, `BFE`, `BGC`, `BSC`, and `BUC`).
+
+[Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and 
+[Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+
+Make sure you downloaded 10 `GeoPackage` files and Then run the following scrips to process and to convert them to `Parquet` format.
+
+
+```bash
+
+./ons-country-region.sh
 
 ```
 
