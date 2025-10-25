@@ -64,10 +64,10 @@ Both commands should return output similar to:
 
 
 <details>
-<summary><h2>1. OS Open UPRN</h2></summary>
+<summary><h2>1. ONS UPRN Directory</h2></summary>
 
-Source: [https://osdatahub.os.uk/downloads/open/OpenUPRN](https://osdatahub.os.uk/downloads/open/OpenUPRN)
-Coverage: Great Britain
+Source: [ONS UPRN Directory](https://www.data.gov.uk/dataset/a615e841-c79e-4566-a422-0618faca9634/ons-uprn-directory-october-2025-epoch-121)
+Last updated: 21 October 2025
 
 Unique Property Reference Number (UPRN) is a unique identifier assigned to every addressable location in the United Kingdom, including residential and commercial properties, land parcels, and other structures such as bus shelters or community assets. Managed by Ordnance Survey, the UPRN acts as a consistent reference point across different datasets and systems, ensuring that information from local authorities, government bodies, and private organisations can be accurately linked to the same physical location. Because it is stable over the lifetime of the property or land parcel, the UPRN plays a vital role in data integration, geocoding, property analytics, and service delivery, helping organisations reduce duplication, improve accuracy, and make better evidence-based decisions.
 
@@ -76,6 +76,9 @@ You can download the latest UPRN dataset from [Ordnance Survey Data Hub](https:/
 Alternatively, you can run the script directly:
 
 ```bash
+
+curl -L -J -O https://www.arcgis.com/sharing/rest/content/items/ad7564917fe94ae4aea6487321e36325/data
+
 ./os-open-uprn.sh
 
 ```
