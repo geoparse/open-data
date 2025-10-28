@@ -1,0 +1,81 @@
+#!/bin/bash
+# ------------------------------------------------------------------------------
+# Script: ons-postcode-directory.sh
+# Description:
+#   Downloads the latest ONS postcode directory,
+#   cleans up, converts selected fields to Parquet (EPSG:4326).
+# ------------------------------------------------------------------------------
+
+# Strict mode: exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
+# ------------------------------------------------------------------------------
+# 1. Prepare working directory
+# ------------------------------------------------------------------------------
+DATA_DIR="data/ons-uprn-directory"
+mkdir -p "$DATA_DIR"  # Create directory if it doesn't exist
+cd "$DATA_DIR"  # Change to data directory
+
+# ------------------------------------------------------------------------------
+# 2. Download and extract the Code-Point Open dataset
+# ------------------------------------------------------------------------------
+echo
+echo "Downloading and Extracting the latest ONS UPRN directory dataset from ArcGIS Hub..."
+curl -L https://www.arcgis.com/sharing/rest/content/items/ad7564917fe94ae4aea6487321e36325/data -o ons-uprn-directory.zip
+unzip $_
+rm $_
+echo
+
+# ------------------------------------------------------------------------------
+# 3. Convert CSV to Parquet using DuckDB
+# ------------------------------------------------------------------------------
+for csv_file in Data/*.csv; do
+    # Get the base filename without extension
+    filename=$(basename "$csv_file" .csv)
+    
+    # Set output path for parquet file
+    parquet_file="${filename}.parquet"
+    
+    echo "Processing: $csv_file -> $parquet_file"
+    
+    # Use DuckDB to convert CSV to Parquet
+    duckdb -c "
+    COPY (
+      SELECT
+        UPRN as uprn, 
+        GRIDGB1E as easting,
+        GRIDGB1N as northing,
+        PCDS as postcode,           -- Postcode string with spaces
+        CTRY25CD as country,        -- Country code
+        RGN25CD as region,          -- Region code
+        CTY25CD as county,          -- County code
+        PFA23CD as police_force,    -- Police force area code
+        msoa21cd as msoa,           -- Middle Layer Super Output Area code
+        lsoa21cd as lsoa,           -- Lower Layer Super Output Area code
+        OA21CD as oa                -- Output Area code
+      FROM read_csv_auto('$csv_file', sample_size=-1)
+    ) TO '$parquet_file' (FORMAT 'parquet');
+    "
+done
+
+echo
+echo "Compress the original CSV file to save disk space"
+# Check if pigz is available, otherwise use gzip
+if command -v pigz &> /dev/null; then
+    pigz -r Data
+else
+    gzip -r Data
+fi
+# ------------------------------------------------------------------------------
+# 4. Display results
+# ------------------------------------------------------------------------------
+echo
+echo "Conversion complete. Generated files:"
+ls -lh  # List files with human-readable sizes
+
+# ------------------------------------------------------------
+# Return to project root
+# ------------------------------------------------------------
+cd - >/dev/null  # Return to previous directory, suppress output
+echo
+echo "Done."
