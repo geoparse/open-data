@@ -51,7 +51,7 @@ for csv_file in Data/*.csv; do
             UPRN as uprn,                    -- Unique Property Reference Number
             GRIDGB1E as easting,             -- Easting coordinate (OSGB36)
             GRIDGB1N as northing,            -- Northing coordinate (OSGB36) 
-            PCDS as postcode,                -- Postcode string with spaces
+            trim(PCDS) as postcode,          -- Postcode string with spaces removed from ends
             CTRY25CD as country,             -- Country code (E92...)
             RGN25CD as region,               -- Region code (E12...)
             CTY25CD as county,               -- County code

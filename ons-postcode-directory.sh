@@ -39,7 +39,7 @@ echo "Converting CSV to Parquet using DuckDB..."
 duckdb -c "
 COPY (
   SELECT
-    PCDS as postcode,           -- Postcode string with spaces
+    trim(PCDS) as postcode,     -- Postcode string with spaces removed from ends
     DOINTR as intr_date,        -- Date of introduction
     DOTERM as term_date,        -- Date of termination
     USRTYPIND as user_type,     -- User type indicator
