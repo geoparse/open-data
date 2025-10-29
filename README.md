@@ -144,7 +144,6 @@ For more information on additional features included in the original `CSV` datas
 <summary><h2>2. ONS UPRN Directory</h2></summary>
 
 Source: [ONS UPRN Directory](https://www.data.gov.uk/dataset/a615e841-c79e-4566-a422-0618faca9634/ons-uprn-directory-october-2025-epoch-121)
-Last updated: 21 October 2025
 
 Unique Property Reference Number (UPRN) is a unique identifier assigned to every addressable location in the United Kingdom, including residential and commercial properties, land parcels, and other structures such as bus shelters or community assets. Managed by Ordnance Survey, the UPRN acts as a consistent reference point across different datasets and systems, ensuring that information from local authorities, government bodies, and private organisations can be accurately linked to the same physical location. Because it is stable over the lifetime of the property or land parcel, the UPRN plays a vital role in data integration, geocoding, property analytics, and service delivery, helping organisations reduce duplication, improve accuracy, and make better evidence-based decisions.
 
@@ -159,8 +158,6 @@ Alternatively, you can run the script directly:
 This will download, process, and save the latest OS Open UPRN dataset as a `Parquet` file in the `data/os-open-uprn/` directory.
 We convert the dataset to a `Parquet` file (using `DuckDB`) instead of a `GeoParquet` file (using `ogr2ogr`) because reading standard `Parquet` files with `pandas` is significantly faster than loading `GeoParquet` files with `geopandas` in Python.
 </details>
-
-
 
 
 <details>
@@ -259,10 +256,7 @@ OS Open Names is a dataset from Ordnance Survey that provides the most comprehen
 ./os-open-names.sh
 
 ```
-
 </details>
-
-
 
 
 <details>
