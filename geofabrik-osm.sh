@@ -33,7 +33,12 @@ wget -q "https://download.geofabrik.de/$REGION/$pbf_file"
 echo
 echo "Extracting OSM layers and converting to Parquet..."
 
-# Get layer names from the PBF file and convert each to Parquet
+# Extract layer names from PBF and convert each to Parquet format
+# Pipeline breakdown:
+# 1. `ogrinfo $pbf_file` - lists available layers (points, lines, multipolygons, etc.)
+# 2. `cut -d: -f2` - removes layer numbers (e.g., "1: points" → " points")
+# 3. `cut -d' ' -f2` - extracts actual layer names
+# 4. `tail -n +3` - skips first two non-layer header lines
 ogrinfo "$pbf_file" | cut -d: -f2 | cut -d' ' -f2 | tail -n +3 | while read layer; do 
     echo "Converting layer: $layer"
     ogr2ogr -f Parquet "${layer}.parquet" "$pbf_file" "$layer"
