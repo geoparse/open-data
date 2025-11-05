@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# ============================================================
-# Script: download_and_convert_ons_geographies.sh
-# Purpose: Download ONS Output Area (OA), LSOA, and MSOA
-#          shapefiles for England and Wales, convert to Parquet.
-# ============================================================
 
 set -euo pipefail
 
@@ -18,10 +13,10 @@ cd $_
 
 mkdir -p gpkg
 
-mv ~/Downloads/Countries_*_Boundaries_UK_*.gpkg gpkg/
-mv ~/Downloads/Regions_*_Boundaries_EN_*.gpkg gpkg/
-
-
+echo "Copying downloaded GeoPackage files to $DATA_DIR/gpkg..."
+cp ~/Downloads/Countries_*_Boundaries_UK_*.gpkg gpkg/
+cp ~/Downloads/Regions_*_Boundaries_EN_*.gpkg gpkg/
+echo
 
 # ------------------------------------------------------------
 # Convert GeoPackage files to Parquet
@@ -34,32 +29,40 @@ for gpkg_file in gpkg/*.gpkg; do
     echo "  Converting: $gpkg_file..."
 
     export CPL_LOG=/dev/null  # ignore warning and error messages 
-    ogr2ogr -q \
+    layer=$(ogrinfo $gpkg_file | grep Polygon | cut -d' ' -f2)
+    
+    if ogrinfo $gpkg_file -al -so | tail -10 | cut -d: -f1 | grep -q CTRY; then
+        sql_query="SELECT CTRY24CD as country_code, CTRY24NM as country, SHAPE as geometry FROM $layer"
+    else
+        sql_query="SELECT RGN24CD as region_code, RGN24NM as region, SHAPE as geometry FROM $layer"
+    fi
+
+    ogr2ogr \
       -f Parquet "${base_name}.parquet" \
       "$gpkg_file" \
       -t_srs EPSG:4326 \
+      -sql "$sql_query" \
       -makevalid
 done
 
 echo "Conversion complete."
 echo
 
-
 # ------------------------------------------------------------
 # Standardize Parquet filenames
 # ------------------------------------------------------------
 
-mv Countries_*_BFC_*.parquet countries_bfc.parquet
-mv Countries_*_BFE_*.parquet countries_bfe.parquet
-mv Countries_*_BGC_*.parquet countries_bgc.parquet
-mv Countries_*_BSC_*.parquet countries_bsc.parquet
-mv Countries_*_BUC_*.parquet countries_buc.parquet
+mv Countries_*_BFC_*.parquet uk_countries_bfc.parquet
+mv Countries_*_BFE_*.parquet uk_countries_bfe.parquet
+mv Countries_*_BGC_*.parquet uk_countries_bgc.parquet
+mv Countries_*_BSC_*.parquet uk_countries_bsc.parquet
+mv Countries_*_BUC_*.parquet uk_countries_buc.parquet
 
-mv Regions_*_BFC_*.parquet regions_bfc.parquet
-mv Regions_*_BFE_*.parquet regions_bfe.parquet
-mv Regions_*_BGC_*.parquet regions_bgc.parquet
-mv Regions_*_BSC_*.parquet regions_bsc.parquet
-mv Regions_*_BUC_*.parquet regions_buc.parquet
+mv Regions_*_BFC_*.parquet en_regions_bfc.parquet
+mv Regions_*_BFE_*.parquet en_regions_bfe.parquet
+mv Regions_*_BGC_*.parquet en_regions_bgc.parquet
+mv Regions_*_BSC_*.parquet en_regions_bsc.parquet
+mv Regions_*_BUC_*.parquet en_regions_buc.parquet
 
 echo "All Parquet files ready in $DATA_DIR"
 echo
