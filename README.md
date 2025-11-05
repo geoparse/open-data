@@ -183,6 +183,86 @@ Here’s a sample of the resulting dataset:
 ```
 </details>
 
+<details>
+<summary><h2>ONS Boundaries - Countries and Regions</h2></summary>
+
+Source: [Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and [Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+
+The Office for National Statistics (ONS) provides boundary data for the UK countries and the regions of England, available in multiple spatial resolutions and coastline treatments to balance accuracy and performance. Each boundary file includes a suffix such as `BFC`, `BFE`, `BGC`, `BSC`, or `BUC` that indicates both the detail level and whether the boundary is clipped to the coastline or includes the extent of the realm (i.e., offshore areas).
+These options let you balance geometric accuracy with file size and performance, depending on your analysis or mapping needs.
+
+Use full resolution versions (BFC/BFE) for analysis or precise overlays, and generalised versions (BGC/BSC/BUC) for visualisation, web mapping, or when handling large datasets.
+Choose “clipped” versions when you only need land boundaries, or “extent of realm” when including sea/offshore territories is important.
+
+| Code    | Meaning                                                       | Detail                                                                   |
+| ------- | ------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **BFE** | Boundary – Full resolution, *Extent of the Realm*             | Highest-detail geometry including offshore areas and islands.            |
+| **BFC** | Boundary – Full resolution, *Clipped to coastline*            | Same high-detail boundary, but trimmed at the mean high-water coastline. |
+| **BGC** | Boundary – Generalised (~20 m), *Clipped to coastline*        | Simplified geometry suitable for most mapping and display purposes.      |
+| **BSC** | Boundary – Super-generalised (~200 m), *Clipped to coastline* | Coarser generalisation for lightweight, large-scale mapping.             |
+| **BUC** | Boundary – Ultra-generalised (~500 m), *Clipped to coastline* | Smallest and simplest file size, least geometric detail.                 |
+
+For process the files you need to download the `GeoPackage` files from the following pages for all spatial resolutions (`BFC`, `BFE`, `BGC`, `BSC`, and `BUC`).
+
+[Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and 
+[Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+
+Make sure you downloaded 10 `GeoPackage` files and Then run the following scrips to process and to convert them to `Parquet` format.
+
+
+```bash
+
+./ons-country-region.sh
+
+```
+
+</details>
+
+
+<details>
+<summary><h2>ONS Boundaries - Output Area</h2></summary>
+
+Source: [https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1](https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1)
+
+Output Area Geography
+
+`ons-output-area.sh` processes socio-economic data for different geographic layers in England and Wales, following the Office for National Statistics (ONS) spatial hierarchy. The smallest statistical building block is the `Census Output Area (OA)`, representing a compact group of households designed for detailed local analysis. `Lower-layer Super Output Areas (LSOA)` combine multiple OAs to ensure population stability over time, while `Middle-layer Super Output Areas (MSOA)` group several LSOAs to create larger, consistent geographic zones suitable for public reporting and policy analysis.
+
+```bash
+
+./ons-output-area.sh
+
+```
+</details>
+
+
+
+<details>
+<summary><h2>ONS Income Data</h2></summary>
+
+Source: [Income estimates for small areas, England and Wales - Office for National Statistics (ONS)](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales)
+
+The Excel file on the above page contains separate sheets for:
+
+* Total annual household income
+* Net annual income
+* Net income before housing costs
+* Net income after housing costs
+
+Data are provided at the `Middle Layer Super Output Area (MSOA)` level for England and Wales.
+Each MSOA is represented by three values — the `lower confidence limit`, `mean estimate`, and `upper confidence limit` 
+which together form a 95% confidence interval.
+A `95% confidence interval` means that we can be 95% confident the true mean household income 
+for each area lies between the lower and upper confidence limits. For further details, see the [Technical Report from Office for Natioanl Statistics, page 30.](https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/smallareaincomeestimatesmodelbasedestimatesofthemeanhouseholdweeklyincomeformiddlelayersuperoutputareas201314technicalreport/householdincometechnicalreport.pdf)
+
+The following script automates the process of downloading and converting income data into Parquet files, processing each sheet individually.
+
+```bash
+./ons-income.sh
+
+```
+</details>
+
 
 <details>
 <summary><h2>OS Open USRN</h2></summary>
@@ -362,89 +442,6 @@ cd ../../
 
 </details>
 
-
-<details>
-<summary><h2>ONS Income Data</h2></summary>
-
-Source: [Income estimates for small areas, England and Wales - Office for National Statistics (ONS)](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales)
-
-The Excel file on the above page contains separate sheets for:
-
-* Total annual household income
-* Net annual income
-* Net income before housing costs
-* Net income after housing costs
-
-Data are provided at the `Middle Layer Super Output Area (MSOA)` level for England and Wales.
-Each MSOA is represented by three values — the `lower confidence limit`, `mean estimate`, and `upper confidence limit` 
-which together form a 95% confidence interval.
-A `95% confidence interval` means that we can be 95% confident the true mean household income 
-for each area lies between the lower and upper confidence limits. For further details, see the [Technical Report from Office for Natioanl Statistics, page 30.](https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/smallareaincomeestimatesmodelbasedestimatesofthemeanhouseholdweeklyincomeformiddlelayersuperoutputareas201314technicalreport/householdincometechnicalreport.pdf)
-
-The following script automates the process of downloading and converting income data into Parquet files, processing each sheet individually.
-
-```bash
-./ons-income.sh
-
-```
-
-</details>
-
-
-
-
-<details>
-<summary><h2>Output Area</h2></summary>
-
-Source: [https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1](https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1)
-
-Output Area Geography
-
-`ons-output-area.sh` processes socio-economic data for different geographic layers in England and Wales, following the Office for National Statistics (ONS) spatial hierarchy. The smallest statistical building block is the `Census Output Area (OA)`, representing a compact group of households designed for detailed local analysis. `Lower-layer Super Output Areas (LSOA)` combine multiple OAs to ensure population stability over time, while `Middle-layer Super Output Areas (MSOA)` group several LSOAs to create larger, consistent geographic zones suitable for public reporting and policy analysis.
-
-```bash
-
-./ons-output-area.sh
-
-```
-</details>
-
-
-
-<details>
-<summary><h2>UK Countries and England Regions</h2></summary>
-
-Source: [Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and [Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
-
-The Office for National Statistics (ONS) provides boundary data for the UK countries and the regions of England, available in multiple spatial resolutions and coastline treatments to balance accuracy and performance. Each boundary file includes a suffix such as `BFC`, `BFE`, `BGC`, `BSC`, or `BUC` that indicates both the detail level and whether the boundary is clipped to the coastline or includes the extent of the realm (i.e., offshore areas).
-These options let you balance geometric accuracy with file size and performance, depending on your analysis or mapping needs.
-
-Use full resolution versions (BFC/BFE) for analysis or precise overlays, and generalised versions (BGC/BSC/BUC) for visualisation, web mapping, or when handling large datasets.
-Choose “clipped” versions when you only need land boundaries, or “extent of realm” when including sea/offshore territories is important.
-
-| Code    | Meaning                                                       | Detail                                                                   |
-| ------- | ------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| **BFE** | Boundary – Full resolution, *Extent of the Realm*             | Highest-detail geometry including offshore areas and islands.            |
-| **BFC** | Boundary – Full resolution, *Clipped to coastline*            | Same high-detail boundary, but trimmed at the mean high-water coastline. |
-| **BGC** | Boundary – Generalised (~20 m), *Clipped to coastline*        | Simplified geometry suitable for most mapping and display purposes.      |
-| **BSC** | Boundary – Super-generalised (~200 m), *Clipped to coastline* | Coarser generalisation for lightweight, large-scale mapping.             |
-| **BUC** | Boundary – Ultra-generalised (~500 m), *Clipped to coastline* | Smallest and simplest file size, least geometric detail.                 |
-
-For process the files you need to download the `GeoPackage` files from the following pages for all spatial resolutions (`BFC`, `BFE`, `BGC`, `BSC`, and `BUC`).
-
-[Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and 
-[Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
-
-Make sure you downloaded 10 `GeoPackage` files and Then run the following scrips to process and to convert them to `Parquet` format.
-
-
-```bash
-
-./ons-country-region.sh
-
-```
-
-</details>
 
 
 ---
