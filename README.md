@@ -183,10 +183,9 @@ Here’s a sample of the resulting dataset:
 ```
 </details>
 
-<details>
-<summary><h2>ONS Boundaries - Countries and Regions</h2></summary>
 
-Source: [Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and [Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+<details>
+<summary><h2>ONS Boundaries</h2></summary>
 
 The Office for National Statistics (ONS) provides boundary data for the UK countries and the regions of England, available in multiple spatial resolutions and coastline treatments to balance accuracy and performance. Each boundary file includes a suffix such as `BFC`, `BFE`, `BGC`, `BSC`, or `BUC` that indicates both the detail level and whether the boundary is clipped to the coastline or includes the extent of the realm (i.e., offshore areas).
 These options let you balance geometric accuracy with file size and performance, depending on your analysis or mapping needs.
@@ -209,18 +208,36 @@ For process the files you need to download the `GeoPackage` files from the follo
 
 Make sure you downloaded 10 `GeoPackage` files and Then run the following scrips to process and to convert them to `Parquet` format.
 
+<details>
+<summary><h3>Countries</h3></summary>
+
+Source: [Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc)
 
 ```bash
 
 ./ons-country-region.sh
 
 ```
-
 </details>
 
 
+
 <details>
-<summary><h2>ONS Boundaries - Output Area</h2></summary>
+<summary><h3>Regions</h3></summary>
+
+Source: [Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+
+```bash
+
+./ons-country-region.sh
+
+```
+</details>
+
+
+
+<details>
+<summary><h3>Output Area</h3></summary>
 
 Source: [https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1](https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1)
 
@@ -231,6 +248,7 @@ Source: [https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/ou
 ./ons-output-area.sh
 
 ```
+</details>
 </details>
 
 
@@ -374,7 +392,7 @@ cd ../../
 
 
 <details>
-<summary><h2>DfT Road Safety</h2></summary>
+<summary><h2>DfT Road Safety - STATS19</h2></summary>
 
 Source: [https://www.data.gov.uk/dataset/road-accidents-safety-data](https://www.data.gov.uk/dataset/road-accidents-safety-data)
 
