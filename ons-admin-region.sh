@@ -4,7 +4,7 @@
 # Script Name: ons-country-region.sh
 # Description:
 #   Automates the conversion of ONS GeoPackage boundary files 
-#   for regions in the England into a standardized Parquet format.
+#   for regions in England into a standardized Parquet format.
 #
 # Author: Abbas Eslami Kiasari
 # =====================================================================
