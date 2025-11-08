@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # =====================================================================
-# Script Name: ons-country-region.sh
+# Script Name: ons-admin-region.sh
 # Description:
 #   Automates the conversion of ONS GeoPackage boundary files 
 #   for regions in England into a standardized Parquet format.
@@ -15,7 +15,7 @@ set -euo pipefail
 # Configuration
 # ------------------------------------------------------------
 
-DATA_DIR="data/ons-admin-region"  # Output directory for processed data
+DATA_DIR="data/ons-admin/region"  # Output directory for processed data
 mkdir -p "$DATA_DIR"
 cd "$DATA_DIR"
 

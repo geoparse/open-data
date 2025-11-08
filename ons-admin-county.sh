@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # =====================================================================
-# Script Name: ons-admin-country.sh
+# Script Name: ons-admin-county.sh
 # Description:
 #   Automates the conversion of ONS GeoPackage boundary files 
-#   for UK countries into a standardized Parquet format.
+#   for UK counties into a standardized Parquet format.
 #
 # Author: Abbas Eslami Kiasari
 # =====================================================================
@@ -15,14 +15,14 @@ set -euo pipefail
 # Configuration
 # ------------------------------------------------------------
 
-DATA_DIR="data/ons-admin/country"  # Output directory for processed data
+DATA_DIR="data/ons-admin/county"  # Output directory for processed data
 mkdir -p "$DATA_DIR"
 cd "$DATA_DIR"
 
 mkdir -p gpkg  # Directory to hold source GeoPackage files
 
 echo "Copying downloaded GeoPackage files to $DATA_DIR/gpkg..."
-cp ~/Downloads/Countries_*_Boundaries_UK_*.gpkg gpkg/  # Copy country boundaries
+cp ~/Downloads/Counties_*_Boundaries*.gpkg gpkg/  # Copy country boundaries
 echo
 
 # ------------------------------------------------------------
@@ -43,7 +43,7 @@ for gpkg_file in gpkg/*.gpkg; do
       -f Parquet "${base_name}.parquet" \
       "$gpkg_file" \
       -t_srs EPSG:4326 \
-      -sql "SELECT CTRY24CD as country_code, CTRY24NM as country, SHAPE as geometry FROM $layer" \
+      -sql "SELECT CTY24CD as county_code, CTY24NM as county, SHAPE as geometry FROM $layer" \
       -makevalid  # Ensure geometries are valid
 done
 
@@ -55,11 +55,11 @@ echo
 # ------------------------------------------------------------
 
 # Rename country Parquet files
-mv Countries_*_BFC_*.parquet countries_bfc.parquet
-mv Countries_*_BFE_*.parquet countries_bfe.parquet
-mv Countries_*_BGC_*.parquet countries_bgc.parquet
-mv Countries_*_BSC_*.parquet countries_bsc.parquet
-mv Countries_*_BUC_*.parquet countries_buc.parquet
+mv Counties_*_BFC_*.parquet counties_bfc.parquet
+mv Counties_*_BFE_*.parquet counties_bfe.parquet
+mv Counties_*_BGC_*.parquet counties_bgc.parquet
+mv Counties_*_BSC_*.parquet counties_bsc.parquet
+mv Counties_*_BUC_*.parquet counties_buc.parquet
 
 echo "All Parquet files ready in $DATA_DIR"
 echo
