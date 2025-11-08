@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # =====================================================================
-# Script Name: ons-country-region.sh
+# Script Name: ons-admin-country.sh
 # Description:
 #   Automates the conversion of ONS GeoPackage boundary files 
 #   for UK countries into a standardized Parquet format.
