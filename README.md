@@ -185,9 +185,13 @@ Here’s a sample of the resulting dataset:
 
 
 <details>
-<summary><h2>ONS Boundaries</h2></summary>
+<summary><h2>ONS Administrative Boundaries</h2></summary>
 
-The Office for National Statistics (ONS) provides boundary data for the UK countries and the regions of England, available in multiple spatial resolutions and coastline treatments to balance accuracy and performance. Each boundary file includes a suffix such as `BFC`, `BFE`, `BGC`, `BSC`, or `BUC` that indicates both the detail level and whether the boundary is clipped to the coastline or includes the extent of the realm (i.e., offshore areas).
+Source: [ONS Administrative Boundaries](https://geoportal.statistics.gov.uk/search?q=BDY_ADM&sort=Date%20Created%7Ccreated%7Cdesc)
+
+The Office for National Statistics (ONS) provides administrative boundary data for various geographic levels across the UK, including countries, English regions, counties, local authority districts, parishes, and wards. 
+Each boundary dataset is available in multiple spatial resolutions and coastline generalisations to balance spatial accuracy with processing performance. 
+Each boundary file includes a suffix such as `BFC`, `BFE`, `BGC`, `BSC`, or `BUC` that indicates both the detail level and whether the boundary is clipped to the coastline or includes the extent of the realm (i.e., offshore areas).
 These options let you balance geometric accuracy with file size and performance, depending on your analysis or mapping needs.
 
 Use full resolution versions (BFC/BFE) for analysis or precise overlays, and generalised versions (BGC/BSC/BUC) for visualisation, web mapping, or when handling large datasets.
@@ -201,21 +205,18 @@ Choose “clipped” versions when you only need land boundaries, or “extent o
 | **BSC** | Boundary – Super-generalised (~200 m), *Clipped to coastline* | Coarser generalisation for lightweight, large-scale mapping.             |
 | **BUC** | Boundary – Ultra-generalised (~500 m), *Clipped to coastline* | Smallest and simplest file size, least geometric detail.                 |
 
-For process the files you need to download the `GeoPackage` files from the following pages for all spatial resolutions (`BFC`, `BFE`, `BGC`, `BSC`, and `BUC`).
-
-[Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc) and 
-[Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_2024&sort=Title%7Ctitle%7Casc)
-
-Make sure you downloaded 10 `GeoPackage` files and Then run the following scrips to process and to convert them to `Parquet` format.
 
 <details>
 <summary><h3>Countries</h3></summary>
 
-Source: [Countries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+Source: [Country Boundaries](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc)
+
+First, download the five GeoPackage files for all spatial resolutions (BFC, BFE, BGC, BSC, and BUC) from [this link](https://geoportal.statistics.gov.uk/search?q=BDY_CTRY%3BDEC_2024&sort=Title%7Ctitle%7Casc).
+Then, run the following scripts to process the data and convert them to Parquet format.
 
 ```bash
 
-./ons-country-region.sh
+./ons-admin-country.sh
 
 ```
 </details>
@@ -229,15 +230,15 @@ Source: [Regions](https://geoportal.statistics.gov.uk/search?q=BDY_RGN%3BDEC_202
 
 ```bash
 
-./ons-country-region.sh
+./ons-admin-region.sh
 
 ```
 </details>
-
+</details>
 
 
 <details>
-<summary><h3>Output Area</h3></summary>
+<summary><h2>ONS Census Boundaries</h2></summary>
 
 Source: [https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1](https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/output-areas1)
 
@@ -248,7 +249,6 @@ Source: [https://www.data.gov.uk/dataset/4a880a9b-b509-4a82-baf1-07e3ce104f4b/ou
 ./ons-output-area.sh
 
 ```
-</details>
 </details>
 
 
